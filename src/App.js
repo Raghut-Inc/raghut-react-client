@@ -8,6 +8,7 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Dashboard from "./pages/Dashboard";
 import Footer from "./components/Footer";
+import OrderTester from "./pages/OrderTester";
 
 const LazyLanding = React.lazy(() => import("./pages/Landing"));
 
@@ -50,6 +51,10 @@ function App() {
     <div className="font-space-grotesk">
       <ScrollToTop />
       <Routes>
+        <Route
+          path="/test"
+          element={<OrderTester />}
+        />
         <Route
           path="/*"
           element={
