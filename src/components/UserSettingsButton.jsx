@@ -8,7 +8,7 @@ const UserSettingsButton = ({ user, setUser }) => {
   // Logout function
   const handleLogout = async () => {
     try {
-      const response = await axios.get(`${API_URL}/auth/logout`, {
+      const response = await axios.post(`${API_URL}/auth/logout`, {}, {
         withCredentials: true,
       });
       if (response.status === 200) {
