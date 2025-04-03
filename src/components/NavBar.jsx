@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import SigninModal from "./SigninModal";
 import { TypeAnimation } from "react-type-animation";
 import UserSettingsButton from "./UserSettingsButton";

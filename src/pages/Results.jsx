@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import ToolRecommender from "../components/ToolRecommender";
 import ResultsCell from "../components/ResultsCell";
 

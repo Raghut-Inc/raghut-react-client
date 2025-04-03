@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Dropdown, Spin } from "antd"; // Import Spin for a loading indicator
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 const SettingsButton = ({ user, setUser }) => {
   const API_URL = process.env.REACT_APP_API_URL;

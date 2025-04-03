@@ -1,5 +1,10 @@
 import React, { Suspense, useCallback, useEffect, useState } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+} from "react-router"; // React Router v7 uses 'react-router'
+
 import SEOMetaTag from "./utils/SEOMetaTag";
 import ScrollToTop from "./utils/scrollToTop";
 import NavBar from "./components/NavBar";
@@ -50,26 +55,18 @@ function App() {
   return (
     <div className="font-space-grotesk">
       <ScrollToTop />
+
+      <NavBar
+        user={user}
+        setUser={setUser}
+        setSigninModalOpen={setSigninModalOpen}
+        signinModalOpen={signinModalOpen}
+        searchable={false}
+        animate={true}
+      />
+
       <Routes>
-        <Route
-          path="/test"
-          element={<OrderTester />}
-        />
-        <Route
-          path="/*"
-          element={
-            <NavBar
-              user={user}
-              setUser={setUser}
-              setSigninModalOpen={setSigninModalOpen}
-              signinModalOpen={signinModalOpen}
-              searchable={false}
-              animate={true}
-            />
-          }
-        />
-      </Routes>
-      <Routes>
+        <Route path="/test" element={<OrderTester />} />
         <Route
           path="/"
           element={
@@ -88,6 +85,7 @@ function App() {
             )
           }
         />
+
         <Route
           path="/terms"
           element={
@@ -102,6 +100,7 @@ function App() {
             </>
           }
         />
+
         <Route
           path="/privacy"
           element={
@@ -117,16 +116,12 @@ function App() {
           }
         />
 
-        <Route path="/dashboard/*">
+        <Route path="/dashboard">
           <Route index element={!user ? <Dashboard user={user} setUser={setUser} /> : <Navigate to="/" replace />} />
         </Route>
       </Routes>
-      <Routes>
-        {["/", "/pricing"].map((path) => (
-          <Route key={path} path={path} element={<Footer />} />
-        ))}
-      </Routes>
-    </div>
+      <Footer />
+    </div >
   );
 }
 

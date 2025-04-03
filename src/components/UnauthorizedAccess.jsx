@@ -1,7 +1,7 @@
 // Components/UnauthorizedAccess.jsx
 import React from "react";
 import { Result, Button } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 const UnauthorizedAccess = () => {
   const navigate = useNavigate();

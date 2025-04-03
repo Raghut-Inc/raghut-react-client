@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import GoogleLogo from "../assets/google_logo.webp";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 
 const GoogleSignUp = () => {
   const API_URL = process.env.REACT_APP_API_URL;
