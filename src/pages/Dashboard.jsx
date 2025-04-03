@@ -25,7 +25,7 @@ export default function Dashboard() {
   }, [API_URL]);
 
   // -------------------
-  // WebSocket Handler with Auto-Reconnect
+  // WebSocket Handler
   // -------------------
   useEffect(() => {
     let isMounted = true;
@@ -34,6 +34,9 @@ export default function Dashboard() {
 
     const connectWS = async () => {
       await fetch(`${API_URL}/health`).catch(() => { }); // optional wakeup
+
+      // 🟣 Always fetch orders on (re)connect
+      if (isMounted) fetchOrders();
 
       const ws = new WebSocket(WS_URL);
       wsRef.current = ws;
@@ -76,7 +79,6 @@ export default function Dashboard() {
 
     connectWS();
 
-    // Cleanup on unmount
     return () => {
       isMounted = false;
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
@@ -87,7 +89,6 @@ export default function Dashboard() {
       }
     };
   }, [API_URL, WS_URL, fetchOrders]);
-
 
   // PATCH order status
   const handleOrderStatus = async (orderId, status) => {
