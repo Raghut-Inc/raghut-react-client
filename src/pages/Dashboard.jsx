@@ -25,16 +25,16 @@ export default function Dashboard() {
   }, [API_URL]);
 
   // -------------------
-  // WebSocket Handler
+  // WebSocket Handler with Auto-Reconnect
   // -------------------
   useEffect(() => {
-    fetchOrders();
-
     let isMounted = true;
+    let reconnectTimeout;
+    const reconnectDelay = 3000; // 3 seconds
 
-    // Only connect once
     const connectWS = async () => {
-      await fetch(`${API_URL}/health`); // optional wakeup
+      await fetch(`${API_URL}/health`).catch(() => { }); // optional wakeup
+
       const ws = new WebSocket(WS_URL);
       wsRef.current = ws;
 
@@ -64,15 +64,22 @@ export default function Dashboard() {
 
       ws.onclose = () => {
         if (!isMounted) return;
-        console.log("⚪ Disconnected from WebSocket");
+        console.warn("⚪ WebSocket closed, retrying in 3s...");
+        reconnectTimeout = setTimeout(connectWS, reconnectDelay);
+      };
+
+      ws.onerror = (err) => {
+        console.error("❌ WebSocket error", err);
+        ws.close();
       };
     };
 
     connectWS();
 
-    // 🟣 Cleanup
+    // Cleanup on unmount
     return () => {
       isMounted = false;
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
       if (wsRef.current) {
         console.log("🟣 Cleaning up ws");
         wsRef.current.close();
@@ -80,6 +87,7 @@ export default function Dashboard() {
       }
     };
   }, [API_URL, WS_URL, fetchOrders]);
+
 
   // PATCH order status
   const handleOrderStatus = async (orderId, status) => {
