@@ -1,10 +1,5 @@
 import React, { Suspense, useCallback, useEffect, useState } from "react";
-import {
-  Routes,
-  Route,
-  Navigate,
-} from "react-router"; // React Router v7 uses 'react-router'
-
+import { Routes, Route, Navigate } from "react-router"; // React Router v7 uses 'react-router'
 import SEOMetaTag from "./utils/SEOMetaTag";
 import ScrollToTop from "./utils/scrollToTop";
 import NavBar from "./components/NavBar";
@@ -14,31 +9,32 @@ import Privacy from "./pages/Privacy";
 import Dashboard from "./pages/Dashboard";
 import Footer from "./components/Footer";
 import OrderTester from "./pages/OrderTester";
+import Login from "./pages/Login";
 
 const LazyLanding = React.lazy(() => import("./pages/Landing"));
 
 function App() {
   const API_URL = process.env.REACT_APP_API_URL;
 
-  const [signinModalOpen, setSigninModalOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
   const fetchAuthenticatedUser = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/auth/success`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(`${API_URL}/auth/success`, { withCredentials: true });
       if (response.data.success) {
-        const fetchedUser = response.data.user;
-        setUser(fetchedUser);
+        setUser(response.data.user);
       } else {
         setUser(null);
       }
     } catch (error) {
-      console.error("Error fetching user data:", error);
-      setUser(null);
+      if (error.response && error.response.status === 401) {
+        console.log("No active session, user not logged in.");
+        setUser(null);
+      } else {
+        console.error("Unexpected error fetching user data:", error);
+      }
     } finally {
       setLoading(false);
     }
@@ -56,14 +52,7 @@ function App() {
     <div className="font-space-grotesk">
       <ScrollToTop />
 
-      <NavBar
-        user={user}
-        setUser={setUser}
-        setSigninModalOpen={setSigninModalOpen}
-        signinModalOpen={signinModalOpen}
-        searchable={false}
-        animate={true}
-      />
+      <NavBar user={user} setUser={setUser} animate={true} />
 
       <Routes>
         <Route path="/test" element={<OrderTester />} />
@@ -80,7 +69,7 @@ function App() {
                   keywords="document search engine, custom search solutions, Raghut platform, organize documents, search tools"
                   url="https://www.raghut.com"
                 />
-                <LazyLanding setSigninModalOpen={setSigninModalOpen} />
+                <LazyLanding />
               </Suspense>
             )
           }
@@ -115,9 +104,9 @@ function App() {
             </>
           }
         />
-
+        <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/dashboard">
-          <Route index element={!user ? <Dashboard user={user} setUser={setUser} /> : <Navigate to="/" replace />} />
+          <Route index element={user ? <Dashboard user={user} setUser={setUser} /> : <Navigate to="/" replace />} />
         </Route>
       </Routes>
       <Footer />

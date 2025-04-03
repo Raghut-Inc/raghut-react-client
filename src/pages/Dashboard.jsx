@@ -7,8 +7,8 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("new");
   const wsRef = useRef(null); // 🟣 keep ws instance across renders
 
-  const API_URL = process.env.REACT_APP_API_BASE;
-  const WS_URL = process.env.REACT_APP_WS_BASE;
+  const API_URL = process.env.REACT_APP_API_URL;
+  const WS_URL = process.env.REACT_APP_WS_URL;
 
   // Load existing orders
   const fetchOrders = useCallback(async () => {

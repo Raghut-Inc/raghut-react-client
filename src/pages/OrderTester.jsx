@@ -23,7 +23,7 @@ export default function OrderTester() {
         try {
             const parsedOrder = JSON.parse(orderInput);
             const res = await axios.post(
-                `${process.env.REACT_APP_API_BASE}/order`,
+                `${process.env.REACT_APP_API_URL}/order`,
                 parsedOrder
             );
             setResponse(res.data);
