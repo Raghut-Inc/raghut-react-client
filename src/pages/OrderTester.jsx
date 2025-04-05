@@ -51,6 +51,7 @@ export default function OrderTester() {
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
 
+            console.log(res.data)
             setTranscript(res.data.transcript);
             // Load the selected audio file for playback
             const audioURL = URL.createObjectURL(audioFile);
@@ -65,7 +66,7 @@ export default function OrderTester() {
     };
 
     return (
-        <div className="min-h-screen bg-neutral-900 text-white p-8 space-y-6">
+        <div className="min-h-screen p-8 space-y-6">
             <h1 className="text-2xl font-bold">🧪 Order Tester</h1>
 
             {/* === Order Sender === */}
